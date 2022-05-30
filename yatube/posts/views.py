@@ -5,7 +5,6 @@ from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
 from .forms import PostForm, CommentForm, Follow
 from django.core.cache import cache
-from django.http import HttpResponseRedirect
 TEN = 10
 
 
@@ -144,6 +143,7 @@ def post_edit(request, post_id):
     }
     return render(request, template, context)
 
+
 @login_required
 def add_comment(request, post_id):
     # Получите пост
@@ -156,6 +156,7 @@ def add_comment(request, post_id):
         comment.post = post
         comment.save()
     return redirect(template, post_id=post_id)
+
 
 @login_required
 def follow_index(request):
@@ -170,6 +171,7 @@ def follow_index(request):
     }
     return render(request, template, context)
 
+
 @login_required
 def profile_follow(request, username):
     """View функция для подписки на автора."""
@@ -182,6 +184,7 @@ def profile_follow(request, username):
             user=follow_user,
         )
     return redirect(template)
+
 
 @login_required
 def profile_unfollow(request, username):

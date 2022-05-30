@@ -1,7 +1,5 @@
 import shutil
 import tempfile
-from urllib import response
-from venv import create
 
 from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -10,7 +8,7 @@ from django.test import Client, TestCase, override_settings
 from django.urls import reverse
 from ..models import Group, Post
 from django import forms
-from ..forms import PostForm, Comment, Follow 
+from ..forms import PostForm, Comment, Follow
 from django.core.cache import cache
 
 User = get_user_model()
@@ -111,7 +109,7 @@ class PagesTests(TestCase):
         self.authorized_client = Client()
         self.user = self.author
         self.authorized_client.force_login(self.user)
-    
+
     def tearDown(self):
         shutil.rmtree(settings.MEDIA_ROOT, ignore_errors=True)
 
@@ -136,7 +134,6 @@ class PagesTests(TestCase):
         self.assertEqual(group, self.group)
         self.assertEqual(text, self.post.text)
         self.assertEqual(image, self.post.image)
-        
 
     def preparation_post_detail(self, response):
         response_post = response.context.get('post')
@@ -316,7 +313,7 @@ class CacheViewsTest(TestCase):
     def test_cache_index(self):
         response = self.guest_client.get(reverse('posts:index'))
         response_1 = self.guest_client.get(reverse('posts:index'))
-        post = Post.objects.create(
+        Post.objects.create(
             text='тест',
             author=self.user,
         )

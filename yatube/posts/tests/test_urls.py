@@ -1,4 +1,3 @@
-from urllib import response
 from django.test import TestCase, Client
 from django.contrib.auth import get_user_model
 from ..models import Group, Post
@@ -52,7 +51,7 @@ class StaticURLTests(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)
 
     def test_add_comment(self):
-        response= self.authorized_client.get(
+        response = self.authorized_client.get(
             f'/posts/{self.post.id}/comment/',
             follow=True
         )
