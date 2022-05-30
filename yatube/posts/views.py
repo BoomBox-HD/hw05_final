@@ -88,7 +88,7 @@ def post_detail(request, post_id):
     # Здесь код запроса к модели и создание словаря контекста
     post = get_object_or_404(Post, id=post_id)
     template = 'posts/post_detail.html'
-    form = CommentForm
+    form = CommentForm(request.POST or None)
     post_count = Post.objects.filter(author=post.author).count()
     comments = post.comments.all()
     context = {
