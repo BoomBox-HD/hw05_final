@@ -91,3 +91,5 @@ class Follow(models.Model):
         on_delete=models.CASCADE,
         related_name='following'
     )
+    def __name__(self):
+        return self.user
