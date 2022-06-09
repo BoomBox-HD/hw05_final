@@ -22,6 +22,7 @@ def authorized_only(func):
         return redirect('/auth/login/')
     return check_user
 
+
 def index(request):
     post_list = Post.objects.all().order_by('-pub_date')
     template = 'posts/index.html'
