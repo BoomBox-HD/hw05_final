@@ -1,7 +1,9 @@
-from django.test import TestCase, Client
-from django.contrib.auth import get_user_model
-from ..models import Group, Post
 from http import HTTPStatus
+
+from django.contrib.auth import get_user_model
+from django.test import Client, TestCase
+
+from ..models import Group, Post
 
 User = get_user_model()
 
@@ -10,7 +12,12 @@ class StaticURLTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.user = User.objects.create_user(username='auth')
+        cls.user = User.objects.create_user(
+            username='auth',
+            first_name='first',
+            last_name='last',
+            email='auth@ya.ru'
+        )
         cls.group = Group.objects.create(
             title='Тестовая группа',
             slug='test-slug',
@@ -56,3 +63,28 @@ class StaticURLTests(TestCase):
             follow=True
         )
         self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_anon_user_url(self):
+        response = self.guest_client.get('/profile/auth/', follow=True)
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_anon_user_edit_post(self):
+        response = self.guest_client.get('/posts/2/edit/')
+        self.assertRedirects(response,
+                             '/auth/login/?next=' + '/posts/2/edit/')
+
+    def test_new_page_not_login_user(self):
+        response = self.guest_client.get('/')
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_new_page_not_login_user(self):
+        response = self.guest_client.get('/create/')
+        self.assertEqual(response.status_code, HTTPStatus.FOUND)
+
+    def test_new_page_login_user(self):
+        response = self.authorized_client.get('/')
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+
+    def test_new_page_not_login_user_redirect(self):
+        response = self.guest_client.get('/create/')
+        self.assertRedirects(response, '/auth/login/?next=/create/')

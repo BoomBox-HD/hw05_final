@@ -1,10 +1,11 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Post, Group, User
-from django.core.paginator import Paginator
-from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
-from .forms import PostForm, CommentForm, Follow
 from django.core.cache import cache
+from django.core.paginator import Paginator
+from django.shortcuts import get_object_or_404, redirect, render
+
+from .forms import CommentForm, Follow, PostForm
+from .models import Group, Post, User
+
 TEN = 10
 
 
@@ -20,7 +21,6 @@ def authorized_only(func):
         # Если пользователь не авторизован — отправим его на страницу логина.
         return redirect('/auth/login/')
     return check_user
-
 
 def index(request):
     post_list = Post.objects.all().order_by('-pub_date')
@@ -123,7 +123,7 @@ def post_create(request):
 @login_required
 def post_edit(request, post_id):
     btn = 'редактировать'
-    post = Post.objects.get(id=post_id)
+    post = get_object_or_404(Post, id=post_id)
     template = 'posts/update_post.html'
     is_edit = True
     if post.author != request.user:

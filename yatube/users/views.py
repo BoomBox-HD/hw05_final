@@ -1,18 +1,13 @@
 # Импортируем CreateView, чтобы создать ему наследника
-from django.views.generic import CreateView
-
+from django.shortcuts import redirect, render
 # Функция reverse_lazy позволяет получить URL по параметрам функции path()
 # Берём, тоже пригодится
 from django.urls import reverse_lazy
-
-# Импортируем класс формы, чтобы сослаться на неё во view-классе
-from .forms import CreationForm, ContactForm
-
-
+from django.views.generic import CreateView
 from django.views.generic.base import TemplateView
 
-
-from django.shortcuts import render, redirect
+# Импортируем класс формы, чтобы сослаться на неё во view-классе
+from .forms import ContactForm, CreationForm
 
 
 class JustStaticPage(TemplateView):
